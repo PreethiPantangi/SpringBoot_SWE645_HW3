@@ -1,9 +1,9 @@
 pipeline {
     agent any
     environment {
-        DOCKERHUB_PASS = credentials('DOCKERHUB_PASS')
+        DOCKERHUB_PASS = credentials('docker-pass')
     }
-    
+
     stages {
         stage('Build') {
             steps {
