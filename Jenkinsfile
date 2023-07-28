@@ -31,11 +31,4 @@ pipeline{
             }
         }
     }
-    post {
-        always {
-            node('any') {
-                sh 'docker logout'
-            }
-        }
-    }
 }
