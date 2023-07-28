@@ -33,7 +33,7 @@ pipeline{
     }
     post {
         always {
-            node('agent-label') {
+            node('any') {
                 sh 'docker logout'
             }
         }
