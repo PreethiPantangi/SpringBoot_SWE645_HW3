@@ -1,7 +1,7 @@
 pipeline{
     agent any
     environment {
-        DOCKERHUB_PASS= credentialsId('DOCKERHUB_PASS')
+        DOCKERHUB_PASS= credentials('DOCKERHUB_PASS')
     }
 
     stages {
