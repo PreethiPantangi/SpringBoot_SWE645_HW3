@@ -20,7 +20,7 @@ pipeline{
         stage("Push Image to docker hub") {
             steps {
                 script {
-                    sh "docker push preethipantangi/survey-api  "
+                    sh "docker push preethipantangi/survey-api"
                 }
             }
         }
