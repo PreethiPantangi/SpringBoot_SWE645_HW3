@@ -25,9 +25,9 @@ pipeline {
         }
     stage('Push docker image to docker hub') {
         steps {
-            withCredentials([string(credentialsId: 'admin', variable: 'admin')]) {
+            withCredentials([string(credentialsId: 'hw3-cred', variable: 'hw3-cred')]) {
                 // providing credentials to login into dockerhub with configured credentials
-            sh 'docker login -u preethipantangi -p ${admin}'
+            sh 'docker login -u preethipantangi -p ${hw3-cred}'
            }
            // pushing image to dockerhub
         sh 'docker image push preethipantangi/survey-ms:latest'
