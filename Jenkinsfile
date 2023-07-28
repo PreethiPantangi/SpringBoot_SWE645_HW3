@@ -1,36 +1,39 @@
 pipeline{
     agent any
     environment {
-        def BUILDVERSION = sh(script: "echo `date +%s`", returnStdout: true).trim()
+        DOCKERHUB_CREDENTIALS=credentials("DOCKERHUB_PASS")
     }
 
     stages {
-        stage("Building Student Survey Mircoservices") {
+        stage("Build") {
+            steps {
+                sh "rm -rf *.war"
+                sh 'mvn clean package'
+                sh 'docker build -t preethipantangi/survey-api .'
+            }
+        }
+        stage('Login') {
+            steps { 
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+            }
+        }
+        stage("Push Image to docker hub") {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'DOCKERHUB_PASS', passwordVariable: 'C_PASS', usernameVariable: 'C_USER')]) {
-                        checkout scm
-                        sh "rm -rf *.war"
-                        sh 'jar -cvf survey.war *'
-                        sh 'echo ${BUILDVERSION}'
-                        println(C_PASS+" "+C_USER)
-                        sh 'docker login -u preethipantangi -p ${C_PASS}'
-                        sh 'docker build -t preethipantangi/survey-api:${BUILDVERSION} .'
-                    }
+                    sh "docker push preethipantangi/survey-api  "
                 }
             }
         }
-        stage("Pushing Image to DockerHub") {
+        stage("Deploying on K8") {
             steps {
-                script {
-                    sh "docker push preethipantangi/survey-api:${BUILDVERSION}"
-                }
+                sh 'kubectl set image deployment/hw3-deployment1 containe1=preethipantangi/survey-api -n default'
+                sh 'kubectl rollout restart deploy hw3-deployment1 -n default'
             }
         }
-        stage("Deploying to Rancher") {
-            steps {
-                sh 'kubectl set image deployment/survey-api survey-api=preethipantangi/survey-api:${BUILDVERSION} -n survey-api'
-            }
+    }
+    post {
+        always {
+            sh 'docker logout'
         }
     }
 }
