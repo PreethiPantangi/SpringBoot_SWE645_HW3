@@ -14,7 +14,7 @@ pipeline{
                         sh 'jar -cvf survey.war *'
                         sh 'echo ${BUILDVERSION}'
                         println(C_PASS+" "+C_USER)
-                        sh 'docker login -u preethipantangi -p ${C_PASS}'
+                        sh 'docker login -u preethipantangi -p Preethi@1998'
                         sh 'docker build -t preethipantangi/survey-api:${BUILDVERSION} .'
                     }
                 }
