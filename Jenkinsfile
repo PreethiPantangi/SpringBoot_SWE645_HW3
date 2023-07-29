@@ -12,8 +12,20 @@ pipeline {
                     sh "rm -rf *.war"
                     sh 'jar -cvf survey.war *'
                     sh 'echo ${BUILDVERSION}'
-                    sh('curl -u docker login -u preethipantangi -p $DOCKERHUB_PASS')
-                    def customImage = docker.build("preethipantangi/survey-api:${BUILD_TIMESTAMP}")
+                    // sh('curl -u docker login -u preethipantangi -p $DOCKERHUB_PASS')
+                    // def customImage = docker.build("preethipantangi/survey-api:${BUILD_TIMESTAMP}")
+                }
+                script {
+                    // Docker login
+                    docker.withRegistry('https://index.docker.io/v1/', 'DOCKERHUB_PASS') {
+                        // The 'docker_credentials_id' should be an ID of the Jenkins credentials containing Docker Hub username and password/token.
+                        
+                        // Build your Docker image here
+                        sh 'docker build -t preethipantangi/survey-api:${BUILD_TIMESTAMP} .'
+                        
+                        // Push the Docker image to the registry
+                        sh 'docker push preethipantangi/survey-api:${BUILD_TIMESTAMP}'
+                    }
                 }
             }
         }
