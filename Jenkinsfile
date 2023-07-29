@@ -5,19 +5,19 @@ pipeline {
     }
 
     stages{ 
-        stage{"Building The Survey Page"} {
+        stage("Building The Survey Page") {
             script {
                 chechkout scm
                 sh 'rm -rf *.war'
                 sh 'jar -cvf AdityaWebApp.war -C WebContent/ .'
                 sh 'echo ${BUILD_TIMESTAMP}'
                 sh "docker login -u arajput4 -p ${DOCKERHUB_PASS}"
-                def customImage = docker.build{"preethipantangi/survey-api:${BUILD_TIMESTAMP}"}
+                def customImage = docker.build("preethipantangi/survey-api:${BUILD_TIMESTAMP}")
             }
         }
     
 
-        stage{"Pushing Image to Dockerhub"}{
+        stage("Pushing Image to Dockerhub"){
             steps{
                 script{
                     sh 'docker push preethipantangi/survey-api:${BUILD_TIMESTAMP}'
@@ -25,14 +25,14 @@ pipeline {
             }
         }
 
-        stage{"Deploying to Rancher as a single pod"}{
+        stage("Deploying to Rancher as a single pod"){
             steps{
                     sh 'kubectl set image deployment/survey survey=preethipantangi/survey-api:${BUILD_TIMESTAMP} -n jenkins-pipeline'
                 }
         }
         
 
-        stage{"Deploying to Rancher as a loadbalancer"}{
+        stage("Deploying to Rancher as a loadbalancer"){
             steps{
                     sh 'kubectl set image deployment/ss-port ss-port=preethipantangi/survey-api:${BUILD_TIMESTAMP} -n jenkins-pipeline'
                 }
