@@ -36,20 +36,15 @@
 
 pipeline {
     agent any
+    environment {
+      // Set your Docker credentials as environment variables
+      DOCKER_HUB_USERNAME = credentials('preethipantangi')
+      DOCKER_HUB_PASSWORD = credentials('Preethi@1998')
+   }
 
     stages {
-      //   stage('Build') {
-      //       steps {
-      //           // Your build steps here
-      //       }
-      //   }
 
         stage('Push Docker Image') {
-            environment {
-                // Set your Docker credentials as environment variables
-                DOCKER_HUB_USERNAME = credentials('preethipantangi')
-                DOCKER_HUB_PASSWORD = credentials('Preethi@1998')
-            }
             steps {
                 script {
                     // Log in to Docker registry using Docker CLI
