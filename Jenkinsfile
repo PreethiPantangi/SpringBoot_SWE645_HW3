@@ -1,53 +1,34 @@
-pipeline {
-   environment {
-        registryCredential = 'docker-password'
-        TIMESTAMP = new Date().format("yyyyMMdd_HHmmss")
-    }
-   agent any
-   tools {
-    maven 'Maven 3.6.3'
-}
-
-   stages {
-    stage('Maven Clean') {
-            steps {
-               script{
-                sh 'mvn clean'
-               }
-            }
-        }
-        stage('Maven Install') {
-            steps {
-               script{
-                sh 'mvn install'
-            }
-            }
-        }
-      stage('Build Docker Image') {
-         steps {
-            script{
-               docker.withRegistry('',registryCredential){
-                  def customImage = docker.build("preethipantangi/survey-api:${env.TIMESTAMP}")
-               }
-            }
-         }
-      }
-
-      stage('Push Image to Dockerhub') {
-         steps {
-            script{
-               docker.withRegistry('',registryCredential){
-                  sh "docker push preethipantangi/survey-api:${env.TIMESTAMP}"
-               }
-            }
-         }
-      }
-      stage('Deploying to Rancher to single node(deployed in 3 replicas)') {
-         steps {
-            script{
-               sh "kubectl set image deployment/hw3-deployment1 container1=preethipantangi/survey-api:${env.TIMESTAMP} -n default"
-            }
-         }
-      }
-   }
+pipeline{
+	agent any
+	environment {
+		DOCKERHUB_PASS = "Preethi@1998"
+	}
+	stages{
+		stage("Generating the Build for SWE645 student survey"){
+			steps{
+				script{
+					checkout scm
+					sh 'rm -rf *.war'
+					sh 'jar -cvf survey.war -C src/main/webapp .'
+					sh 'echo "Preethi@1998" | docker login -u preethipantangi --password-stdin'
+					sh 'docker build -t preethipantangi/survey-api .'
+				}
+			}
+		}
+		stage("Pushing image to docker"){
+			steps{
+				script{
+					sh 'docker push preethipantangi/survey-api'
+				}
+			}
+		}
+		// stage("Deploying to rancher"){
+		// 	steps{
+		// 		script{
+				
+		// 			sh 'kubectl rollout restart deploy deployment1 -n default'
+		// 		}
+		// 	}
+		// }
+	}
 }
