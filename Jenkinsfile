@@ -11,7 +11,7 @@ pipeline{
 					sh 'rm -rf *.war'
 					sh 'jar -cvf survey.war *'
 					// sh "docker login -u preethipantangi -p ${DOCKERHUB_PASS}"
-               sh('curl -u docker login -u preethipantangi -p ${DOCKERHUB_PASS} https://hub.docker.com/')
+               sh('curl -u echo "Preethi@1998" | docker login -u preethipantangi -p ${DOCKERHUB_PASS} https://hub.docker.com/')
 					// sh 'docker build -t preethipantangi/survey-api .'
 				}
 			}
