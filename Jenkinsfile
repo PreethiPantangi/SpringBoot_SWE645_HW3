@@ -27,14 +27,9 @@ pipeline{
                 }
             }
         }
-        stage("Deploying to Rancher as single pod") {
+        stage("Deploying to Rancher") {
             steps {
                 sh 'kubectl --kubeconfig=/var/lib/jenkins/config set image deployment/hw3-deployment1 container-0=preethipantangi/surveyapi:${BUILDVERSION} -n hw3-namespace1'
-            }
-        }
-        stage("Deploying to Rancher as with load balancer") {
-            steps {
-                sh 'kubectl --kubeconfig=/var/lib/jenkins/config set image deployment/hw3-deployment1-loadbalancer container-0=preethipantangi/surveyapi:${BUILDVERSION} -n hw3-namespace1'
             }
         }
     }
