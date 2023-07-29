@@ -64,11 +64,11 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
-            steps {
-                // Your deployment steps here, if any
-            }
-        }
+      //   stage('Deploy') {
+      //       steps {
+      //           // Your deployment steps here, if any
+      //       }
+      //   }
     }
 
     post {
