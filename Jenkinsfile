@@ -10,7 +10,7 @@ pipeline{
 					checkout scm
 					sh 'rm -rf *.war'
 					sh 'jar -cvf survey.war *'
-					sh 'echo "Preethi@1998" | sudo -S docker login -u preethipantangi --password-stdin'
+					sh 'echo "Preethi@1998" | sudo -S docker login -u preethipantangi -p'
 					sh 'docker build -t preethipantangi/survey-api .'
 				}
 			}
