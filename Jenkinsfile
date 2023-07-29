@@ -65,11 +65,4 @@ pipeline {
       //       }
       //   }
     }
-
-    post {
-        always {
-            // Clean up by logging out of Docker
-            sh "docker logout"
-        }
-    }
 }
