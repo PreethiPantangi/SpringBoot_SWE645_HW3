@@ -12,7 +12,7 @@ pipeline {
                     sh "rm -rf *.war"
                     sh 'jar -cvf survey.war *'
                     sh 'echo ${BUILDVERSION}'
-                    sh 'Logging to docker'
+                    sh 'echo Logging to docker'
                     // sh('curl -u docker login -u preethipantangi -p ${DOCKERHUB_PASS}')
                 }
             }
