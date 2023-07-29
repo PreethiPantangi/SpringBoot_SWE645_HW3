@@ -27,15 +27,19 @@ pipeline {
 
         stage("Deploying to Rancher as a single pod"){
             steps{
-                    sh 'kubectl set image deployment/survey survey=preethipantangi/survey-api:${BUILD_TIMESTAMP} -n jenkins-pipeline'
-                }
+               script {
+                  sh 'kubectl set image deployment/survey survey=preethipantangi/survey-api:${BUILD_TIMESTAMP} -n jenkins-pipeline'
+               }        
+            }
         }
         
 
         stage("Deploying to Rancher as a loadbalancer"){
             steps{
-                    sh 'kubectl set image deployment/ss-port ss-port=preethipantangi/survey-api:${BUILD_TIMESTAMP} -n jenkins-pipeline'
-                }
+               script {
+                  sh 'kubectl set image deployment/ss-port ss-port=preethipantangi/survey-api:${BUILD_TIMESTAMP} -n jenkins-pipeline'
+               }        
+            }
         }   
 
         
