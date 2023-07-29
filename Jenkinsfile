@@ -29,13 +29,12 @@ pipeline{
         }
         stage("Deploying to Rancher as single pod") {
             steps {
-               sh 'kubectl --kubeconfig=/var/lib/jenkins/config get nodes'
-               //  sh 'kubectl --kubeconfig=config set image deployment/survey-pipeline survey-pipeline=preethipantangi/surveyapi:${BUILDVERSION} -n jenkins-pipeline'
+                sh 'kubectl --kubeconfig=/var/lib/jenkins/config set image deployment/survey-pipeline survey-pipeline=preethipantangi/surveyapi:${BUILDVERSION} -n jenkins-pipeline'
             }
         }
         stage("Deploying to Rancher as with load balancer") {
             steps {
-                sh 'kubectl set image deployment/hw3-deployment1-loadbalancer hw3-deployment1-loadbalancer=preethipantangi/surveyapi:${BUILDVERSION} -n jenkins-pipeline'
+                sh 'kubectl --kubeconfig=/var/lib/jenkins/config set image deployment/hw3-deployment1-loadbalancer hw3-deployment1-loadbalancer=preethipantangi/surveyapi:${BUILDVERSION} -n jenkins-pipeline'
             }
         }
     }
