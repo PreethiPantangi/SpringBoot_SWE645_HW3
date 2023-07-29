@@ -12,8 +12,11 @@ pipeline {
                     sh "rm -rf *.war"
                     sh 'jar -cvf survey.war *'
                     sh 'echo ${BUILDVERSION}'
+                    sh 'mkdir -p ${HOME}/.docker'
+                    sh "echo '{\"auths\": {\"https://index.docker.io/v1/\": {\"auth\": \"preethipantangi:${DOCKERHUB_PASS}\"}}}' > ${HOME}/.docker/config.json"
+                    sh 'docker login -u preethipantangi --password-stdin < ${HOME}/.docker/config.json'
                     // sh('curl -u docker login -u preethipantangi -p $DOCKERHUB_PASS')
-                    sh "docker login -u preethipantangi -p ${DOCKERHUB_PASS}"
+                    // sh "docker login -u preethipantangi -p ${DOCKERHUB_PASS}"
                     // sh "sudo docker login -u preethipantangi -p ${DOCKERHUB_PASS}"
                     // def customImage = docker.build("preethipantangi/survey-api:${BUILD_TIMESTAMP}")
                 }
