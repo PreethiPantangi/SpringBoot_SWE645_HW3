@@ -13,7 +13,7 @@ pipeline {
                     sh 'jar -cvf survey.war *'
                     sh 'echo ${BUILDVERSION}'
                     // sh 'echo Logging to docker'
-                    // sh('curl -u docker login -u preethipantangi -p ${DOCKERHUB_PASS}')
+                    sh 'docker login -u preethipantangi -p ${DOCKERHUB_PASS}'
                 }
             }
         }
