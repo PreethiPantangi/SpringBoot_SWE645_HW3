@@ -1,7 +1,7 @@
 pipeline{
 	agent any
 	environment {
-		DOCKERHUB_PASS = "Preethi@1998"
+		DOCKERHUB_PASS = credentials('docker-pass')
 	}
 	stages{
 		stage("Generating the Build for SWE645 student survey"){
@@ -10,7 +10,7 @@ pipeline{
 					checkout scm
 					sh 'rm -rf *.war'
 					sh 'jar -cvf survey.war *'
-					sh 'sudo docker login -u preethipantangi -p Preethi@1998'
+					sh "docker login -u preethipantangi -p ${DOCKERHUB_PASS}"
 					// sh 'docker build -t preethipantangi/survey-api .'
 				}
 			}
