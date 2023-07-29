@@ -10,7 +10,7 @@ pipeline {
                script {
                   chechkout scm
                   sh 'rm -rf *.war'
-                  sh 'jar -cvf survey.war -C WebContent/ .'
+                  sh 'jar -cvf survey.war *'
                   sh 'echo ${BUILD_TIMESTAMP}'
                   sh "docker login -u preethipantangi -p ${DOCKERHUB_PASS}"
                   def customImage = docker.build("preethipantangi/survey-api:${BUILD_TIMESTAMP}")
