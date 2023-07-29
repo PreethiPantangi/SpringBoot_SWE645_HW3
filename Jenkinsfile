@@ -1,38 +1,53 @@
 pipeline {
-    agent any
-    environment {
-        DOCKERHUB_PASS = credentials('docker-password')
+   environment {
+        registryCredential = 'docker-password'
+        TIMESTAMP = new Date().format("yyyyMMdd_HHmmss")
     }
+   agent any
+   tools {
+    maven 'Maven 3.6.3'
+}
 
-    stages {
-        stage("Building Student Survey Mircoservices") {
+   stages {
+    stage('Maven Clean') {
             steps {
-                script {
-                    checkout scm
-                    sh "rm -rf *.war"
-                    sh 'jar -cvf survey.war *'
-                    sh 'echo ${BUILDVERSION}'
-                    // sh 'echo Logging to docker'
-                    sh 'docker login -u preethipantangi -p ${DOCKERHUB_PASS}'
-                }
+               script{
+                sh 'mvn clean'
+               }
             }
         }
-        stage("Pushing Image to DockerHub") {
+        stage('Maven Install') {
             steps {
-                script {
-                    sh "docker push preethipantangi/survey-api"
-                }
+               script{
+                sh 'mvn install'
+            }
             }
         }
-        stage("Deploying to Rancher as single pod") {
-            steps {
-                sh 'kubectl set image deployment/hw3-pipeline hw3-pipeline=preethipantangi/survey-api:${BUILD_TIMESTAMP} -n jenkins-pipeline'
+      stage('Build Docker Image') {
+         steps {
+            script{
+               docker.withRegistry('',registryCredential){
+                  def customImage = docker.build("preethipantangi/survey-api:${env.TIMESTAMP}")
+               }
             }
-        }
-        stage("Deploying to Rancher with load balancer") {
-            steps {
-                sh 'kubectl set image deployment/hw3-deployment1-loadbalancer hw3-deployment1-loadbalancer=preethipantangi/survey-api:${BUILD_TIMESTAMP} -n jenkins-pipeline'
+         }
+      }
+
+      stage('Push Image to Dockerhub') {
+         steps {
+            script{
+               docker.withRegistry('',registryCredential){
+                  sh "docker push preethipantangi/survey-api:${env.TIMESTAMP}"
+               }
             }
-        }
-    }
+         }
+      }
+      stage('Deploying to Rancher to single node(deployed in 3 replicas)') {
+         steps {
+            script{
+               sh "kubectl set image deployment/hw3-deployment1 container1=preethipantangi/survey-api:${env.TIMESTAMP} -n default"
+            }
+         }
+      }
+   }
 }
