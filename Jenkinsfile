@@ -20,7 +20,7 @@ pipeline {
         stage("Pushing Image to DockerHub") {
             steps {
                 script {
-                    sh "curl -u docker push preethipantangi/survey-api:$BUILD_TIMESTAMP"
+                    sh "docker push preethipantangi/survey-api:$BUILD_TIMESTAMP"
                 }
             }
         }
