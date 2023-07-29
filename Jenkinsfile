@@ -5,19 +5,33 @@ pipeline {
     }
 
     stages {
-        stage('Build') {
+        stage("Building Student Survey Mircoservices") {
             steps {
-                echo 'Building..'
+                script {
+                    checkout scm
+                    sh "rm -rf *.war"
+                    sh 'jar -cvf survey.war *'
+                    sh 'echo ${BUILDVERSION}'
+                    sh "docker login -u preethipantangi -p ${DOCKERHUB_PASS}"
+                    def customImage = docker.build("preethipantangi/survey-api:${BUILD_TIMESTAMP}")
+                }
             }
         }
-        stage('Test') {
+        stage("Pushing Image to DockerHub") {
             steps {
-                echo 'Testing..'
+                script {
+                    sh "docker push preethipantangi/survey-api:${BUILD_TIMESTAMP}"
+                }
             }
         }
-        stage('Deploy') {
+        stage("Deploying to Rancher as single pod") {
             steps {
-                echo 'Deploying....'
+                sh 'kubectl set image deployment/hw3-pipeline hw3-pipeline=preethipantangi/survey-api:${BUILD_TIMESTAMP} -n jenkins-pipeline'
+            }
+        }
+        stage("Deploying to Rancher with load balancer") {
+            steps {
+                sh 'kubectl set image deployment/hw3-deployment1-loadbalancer hw3-deployment1-loadbalancer=preethipantangi/survey-api:${BUILD_TIMESTAMP} -n jenkins-pipeline'
             }
         }
     }
