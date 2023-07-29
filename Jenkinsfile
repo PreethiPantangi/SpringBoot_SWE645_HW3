@@ -38,11 +38,11 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
-            steps {
-                // Your build steps here
-            }
-        }
+      //   stage('Build') {
+      //       steps {
+      //           // Your build steps here
+      //       }
+      //   }
 
         stage('Push Docker Image') {
             environment {
