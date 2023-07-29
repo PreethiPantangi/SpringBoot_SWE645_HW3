@@ -6,13 +6,15 @@ pipeline {
 
     stages{ 
         stage("Building The Survey Page") {
-            script {
-                chechkout scm
-                sh 'rm -rf *.war'
-                sh 'jar -cvf AdityaWebApp.war -C WebContent/ .'
-                sh 'echo ${BUILD_TIMESTAMP}'
-                sh "docker login -u arajput4 -p ${DOCKERHUB_PASS}"
-                def customImage = docker.build("preethipantangi/survey-api:${BUILD_TIMESTAMP}")
+            steps {
+               script {
+                  chechkout scm
+                  sh 'rm -rf *.war'
+                  sh 'jar -cvf AdityaWebApp.war -C WebContent/ .'
+                  sh 'echo ${BUILD_TIMESTAMP}'
+                  sh "docker login -u arajput4 -p ${DOCKERHUB_PASS}"
+                  def customImage = docker.build("preethipantangi/survey-api:${BUILD_TIMESTAMP}")
+               }
             }
         }
     
