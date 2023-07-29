@@ -9,8 +9,8 @@ pipeline{
 				script{
 					checkout scm
 					sh 'rm -rf *.war'
-					sh 'jar -cvf survey.war *'
-					sh 'sudo docker login -u preethipantangi -p Preethi@1998'
+					sh 'jar -cvf SWE645Assignment2.war -C src/main/webapp .'
+					sh 'echo "Preethi@1998" | docker login -u preethipantangi --password-stdin'
 					sh 'docker build -t preethipantangi/survey-api .'
 				}
 			}
@@ -26,7 +26,7 @@ pipeline{
 		// 	steps{
 		// 		script{
 				
-		// 			sh 'kubectl rollout restart deploy deployment1 -n default'
+		// 			sh 'kubectl rollout restart deploy deployment1 -n assignments'
 		// 		}
 		// 	}
 		// }
