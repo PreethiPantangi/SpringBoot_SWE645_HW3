@@ -10,18 +10,18 @@ pipeline{
 					checkout scm
 					sh 'rm -rf *.war'
 					sh 'jar -cvf survey.war *'
-					sh 'sudo docker login -u preethipantangi -p Preethi@1998'
+					// sh 'sudo docker login -u preethipantangi -p Preethi@1998'
 					sh 'docker build -t preethipantangi/survey-api .'
 				}
 			}
 		}
-		stage("Pushing image to docker"){
-			steps{
-				script{
-					sh 'docker push preethipantangi/survey-api'
-				}
-			}
-		}
+		// stage("Pushing image to docker"){
+		// 	steps{
+		// 		script{
+		// 			sh 'docker push preethipantangi/survey-api'
+		// 		}
+		// 	}
+		// }
 		// stage("Deploying to rancher"){
 		// 	steps{
 		// 		script{
