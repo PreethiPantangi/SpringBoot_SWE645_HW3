@@ -11,7 +11,7 @@ pipeline{
                     withCredentials([usernamePassword(credentialsId: 'docker-pass', passwordVariable: 'C_PASS', usernameVariable: 'C_USER')]) {
                         checkout scm
                         sh "rm -rf *.war"
-                        sh 'jar -cvf survey.war *'
+                        sh 'jar -cvf *'
                         sh 'echo ${BUILDVERSION}'
                         println(C_PASS+" "+C_USER)
                         sh 'docker login -u preethipantangi -p ${C_PASS}'
