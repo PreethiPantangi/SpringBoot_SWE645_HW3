@@ -15,7 +15,7 @@ pipeline{
                         sh 'echo ${BUILDVERSION}'
                         println(C_PASS+" "+C_USER)
                         sh 'docker login -u preethipantangi -p ${C_PASS}'
-                        sh 'docker build -t preethipantangi/survey-api:${BUILDVERSION} .'
+                        sh 'docker build -t preethipantangi/survey-api .'
                     }
                 }
             }
@@ -23,7 +23,7 @@ pipeline{
         stage("Pushing Image to DockerHub") {
             steps {
                 script {
-                    sh "docker push preethipantangi/survey-api:${BUILDVERSION}"
+                    sh "docker push preethipantangi/survey-api"
                 }
             }
         }
