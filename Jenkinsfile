@@ -29,7 +29,7 @@ pipeline{
         }
         stage("Deploying to Rancher") {
             steps {
-                sh 'kubectl --kubeconfig=/var/lib/jenkins/config set image deployment/hw3-deployment container-0=preethipantangi/surveyapi:${BUILDVERSION} -n hw3-namespace'
+                sh 'kubectl set image deployment/hw3-deployment container-0=preethipantangi/surveyapi:${BUILDVERSION} -n hw3-namespace'
             }
         }
     }
