@@ -15,7 +15,7 @@ pipeline{
                         sh 'echo ${BUILDVERSION}'
                         println(C_PASS+" "+C_USER)
                         sh 'docker login -u preethipantangi -p ${C_PASS}'
-                        sh 'docker build -t preethipantangi/survey-api .'
+                        sh 'docker build -t preethipantangi/survey-api:${BUILDVERSION} .'
                     }
                 }
             }
@@ -23,13 +23,13 @@ pipeline{
         stage("Pushing Image to DockerHub") {
             steps {
                 script {
-                    sh "docker push preethipantangi/survey-api"
+                    sh "docker push preethipantangi/survey-api:${BUILDVERSION}"
                 }
             }
         }
         stage("Deploying to Rancher") {
             steps {
-                sh 'kubectl set image deployment/hw3-deployment container-0=preethipantangi/survey-api -n hw3-namespace'
+                sh 'kubectl set image deployment/hw3-deployment container-0=preethipantangi/survey-api:${BUILDVERSION} -n hw3-namespace'
             }
         }
     }
