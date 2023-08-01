@@ -24,13 +24,17 @@ pipeline{
             steps {
                 script {
                     sh "docker push preethipantangi/survey-api:${BUILDVERSION}"
-                    sh "docker pull preethipantangi/survey-api:${BUILDVERSION}"
                 }
             }
         }
         stage("Deploying to Rancher") {
             steps {
                 sh 'kubectl set image deployment/hw3-deployment container-0=preethipantangi/surveyapi:${BUILDVERSION} -n hw3-namespace'
+            }
+        }
+        stage("Deploying to Rancher with load balancer") {
+            steps {
+                sh 'kubectl set image deployment/hw3-deployment-loadbalancer container-0=preethipantangi/surveyapi:${BUILDVERSION} -n hw3-namespace'
             }
         }
     }
