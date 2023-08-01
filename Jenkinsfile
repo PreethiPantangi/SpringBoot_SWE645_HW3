@@ -8,7 +8,7 @@ pipeline{
         stage("Building Student Survey Form page") {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'DOCKERHUB_PASS', passwordVariable: 'C_PASS', usernameVariable: 'C_USER')]) {
+                    withCredentials([usernamePassword(credentialsId: 'docker-pass', passwordVariable: 'C_PASS', usernameVariable: 'C_USER')]) {
                         checkout scm
                         sh "rm -rf *.war"
                         sh 'jar -cvf survey.war *'
