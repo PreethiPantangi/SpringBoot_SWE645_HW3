@@ -24,6 +24,7 @@ pipeline{
             steps {
                 script {
                     sh "docker push preethipantangi/survey-api:${BUILDVERSION}"
+                    sh "docker pull preethipantangi/survey-api:${BUILDVERSION}"
                 }
             }
         }
