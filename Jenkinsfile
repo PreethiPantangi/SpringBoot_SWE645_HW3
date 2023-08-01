@@ -30,6 +30,7 @@ pipeline{
         stage("Deploying to Rancher") {
             steps {
                 sh 'kubectl set image deployment/hw3-deployment container-0=preethipantangi/survey-api:${BUILDVERSION} -n hw3-namespace'
+                sh 'kubectl rollout restart deploy hw3-deployment -n hw3-namespace'
             }
         }
     }
