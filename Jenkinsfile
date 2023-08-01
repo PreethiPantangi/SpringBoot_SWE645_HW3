@@ -10,12 +10,12 @@ pipeline{
                 script {
                     withCredentials([usernamePassword(credentialsId: 'docker-pass', passwordVariable: 'C_PASS', usernameVariable: 'C_USER')]) {
                         checkout scm
-                        sh "rm -rf *.war"
+                        sh "rm -rf *.jar"
                         sh 'mvn clean package -DskipTests=true'
                         sh 'echo ${BUILDVERSION}'
                         println(C_PASS+" "+C_USER)
                         sh 'docker login -u preethipantangi -p ${C_PASS}'
-                        sh 'docker build -t preethipantangi/surveyapi:${BUILDVERSION} .'
+                        sh 'docker build -t preethipantangi/survey-api:${BUILDVERSION} .'
                     }
                 }
             }
@@ -23,13 +23,13 @@ pipeline{
         stage("Pushing Image to DockerHub") {
             steps {
                 script {
-                    sh "docker push preethipantangi/surveyapi:${BUILDVERSION}"
+                    sh "docker push preethipantangi/survey-api:${BUILDVERSION}"
                 }
             }
         }
         stage("Deploying to Rancher") {
             steps {
-                sh 'kubectl --kubeconfig=/var/lib/jenkins/config set image deployment/hw3-deployment1 container-0=preethipantangi/surveyapi:${BUILDVERSION} -n hw3-namespace1'
+                sh 'kubectl set image deployment/hw3-deployment container-0=preethipantangi/survey-api:${BUILDVERSION} -n jenkins-pipeline'
             }
         }
     }
