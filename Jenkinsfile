@@ -32,10 +32,5 @@ pipeline{
                 sh 'kubectl set image deployment/hw3-deployment container-0=preethipantangi/surveyapi:${BUILDVERSION} -n hw3-namespace'
             }
         }
-        stage("Deploying to Rancher with load balancer") {
-            steps {
-                sh 'kubectl set image deployment/hw3-deployment-lb container-0=preethipantangi/surveyapi:${BUILDVERSION} -n hw3-namespace'
-            }
-        }
     }
 }
